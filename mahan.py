@@ -20,11 +20,12 @@ if not os.path.exists(STUDENTS_FILE):
     ADMIN_ADD_PASS,
     ADMIN_UPDATE_ID,
     ADMIN_UPDATE_GRADE,
-) = range(7)
+    ADMIN_DELETE_ID,
+) = range(8)
 
 # دکمه‌های منو
 student_menu = [["ورود به سامانه"]]
-admin_menu = [["افزودن دانشجو", "تغییر نمره"], ["اطلاعات دانشجوها"]]
+admin_menu = [["افزودن دانشجو", "تغییر نمره"], ["اطلاعات دانشجوها", "حذف دانشجو"]]
 
 # تابع برای بارگذاری دیتا
 def load_students():
@@ -117,6 +118,22 @@ async def admin_update_grade_final(update: Update, context: ContextTypes.DEFAULT
         await update.message.reply_text("❌ شماره دانشجویی یافت نشد.")
     return ConversationHandler.END
 
+# حذف دانشجو توسط ادمین
+async def admin_delete_student(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("شماره دانشجویی دانشجویی که می‌خواهید حذف کنید را وارد کنید:")
+    return ADMIN_DELETE_ID
+
+async def admin_delete_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    std_id = update.message.text.strip()
+    students = load_students()
+    if std_id in students:
+        del students[std_id]
+        save_students(students)
+        await update.message.reply_text(f"✅ دانشجو با شماره {std_id} حذف شد.")
+    else:
+        await update.message.reply_text("❌ شماره دانشجویی یافت نشد.")
+    return ConversationHandler.END
+
 # نمایش لیست دانشجوها
 async def admin_list_students(update: Update, context: ContextTypes.DEFAULT_TYPE):
     students = load_students()
@@ -165,11 +182,21 @@ if __name__ == "__main__":
         fallbacks=[CommandHandler("cancel", cancel)]
     )
 
+    # حذف دانشجو
+    delete_conv = ConversationHandler(
+        entry_points=[MessageHandler(filters.Regex("^(حذف دانشجو)$") & filters.Chat(chat_id=ADMIN_CHAT_ID), admin_delete_student)],
+        states={
+            ADMIN_DELETE_ID: [MessageHandler(filters.TEXT, admin_delete_id)],
+        },
+        fallbacks=[CommandHandler("cancel", cancel)]
+    )
+
     # هندلرها
     app.add_handler(CommandHandler("start", start))
     app.add_handler(student_conv)
     app.add_handler(add_conv)
     app.add_handler(update_conv)
+    app.add_handler(delete_conv)
     app.add_handler(MessageHandler(filters.Regex("^(اطلاعات دانشجوها)$") & filters.Chat(chat_id=ADMIN_CHAT_ID), admin_list_students))
 
     print("ربات اجرا شد ✅")
