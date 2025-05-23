@@ -3,8 +3,8 @@ import os
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters, ConversationHandler
 
-BOT_TOKEN = ""
-ADMIN_CHAT_IDS = {1111111, 123456789}  # اینجا میشه چند تا ادمین رو اضاف کرد
+BOT_TOKEN = "7766760437:AAFj-vuC3jz3uOLNlAc3sxW4WioPDnQS-2M"
+ADMIN_CHAT_IDS = {961854122, 123456789}  # اینجا میشه چند تا ادمین رو اضاف کرد
 
 STUDENTS_FILE = "students.json"
 if not os.path.exists(STUDENTS_FILE):
