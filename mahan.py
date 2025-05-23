@@ -3,8 +3,8 @@ import os
 from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters, ConversationHandler
 
-BOT_TOKEN = "7766760437:AAFj-vuC3jz3uOLNlAc3sxW4WioPDnQS-2M"
-ADMIN_CHAT_IDS = {961854122, 123456789}  # شناسه‌های چت ادمین‌ها (عدد دوم نمونه است)
+BOT_TOKEN = ""
+ADMIN_CHAT_IDS = {1111111, 123456789}  # اینجا میشه چند تا ادمین رو اضاف کرد
 
 STUDENTS_FILE = "students.json"
 if not os.path.exists(STUDENTS_FILE):
@@ -26,7 +26,7 @@ if not os.path.exists(STUDENTS_FILE):
     ADMIN_DELETE_ID,
 ) = range(11)
 
-# دکمه‌های منو
+# دکمه‌های منو دستکاری شه کار نمیکنه زنجیروار به هم متصلن
 student_menu = [["ورود به سامانه"]]
 student_logged_in_menu = [["تغییر رمز عبور", "خروج"]]
 admin_menu = [["افزودن دانشجو", "تغییر نمره"], ["اطلاعات دانشجوها", "حذف دانشجو"]]
@@ -288,5 +288,5 @@ if __name__ == "__main__":
     app.add_handler(MessageHandler(filters.Regex("^(اطلاعات دانشجوها)$") & filters.Chat(chat_id=ADMIN_CHAT_IDS), admin_list_students))
     app.add_handler(MessageHandler(filters.Regex("^(خروج)$"), student_menu_handler))
 
-    print("ربات اجرا شد ✅")
+    print("runing🤪")
     app.run_polling()
